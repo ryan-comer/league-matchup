@@ -1,11 +1,30 @@
 {
   "name": "league-matchup-utils",
+  "author": {
+    "name": "Ryan Comer",
+    "email": "ryancomer94@gmail.com"
+  },
+  "description": "League Matchup Utils is a utility app for League of Legends.",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
+  "homepage": "./",
+  "build": {
+    "appId": "league.matchup.utils",
+    "productName": "League Matchup Utils",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*",
+      "main.js"
+    ],
+    "extends": null
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "dotenv": "^16.0.1",
+    "electron-is-dev": "^2.0.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
@@ -14,8 +33,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "concurrently -k \"yarn start\" \"yarn electron .\""
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +56,11 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.0",
+    "electron": "^18.2.4",
+    "electron-builder": "^23.0.3",
+    "wait-on": "^6.0.1"
   }
 }
