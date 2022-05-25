@@ -2,6 +2,7 @@ require('dotenv').config()
 const path = require('path')
 
 const {app, BrowserWindow, ipcMain} = require('electron')
+const { autoUpdater } = require('electron-updater')
 const isDev = require('electron-is-dev')
 
 const { exec } = require('node:child_process')
@@ -49,3 +50,7 @@ app.on('activate', () => {
         createWindow()
     }
 })
+
+app.on('ready', function()  {
+  autoUpdater.checkForUpdatesAndNotify()
+});

@@ -50,8 +50,10 @@ function compareVersions(versionOne, versionTwo){
     }
 }
 
+// Get the most recent league version
 async function getCurrentLeagueVersion(){
-    return '12.5.1'
+    const versionJson = (await axios.get('https://ddragon.leagueoflegends.com/api/versions.json'))['data']
+    return versionJson[0]
 }
 
 function MainPage(props){
@@ -74,8 +76,8 @@ function MainPage(props){
     // Launch the windows based on the matchup selection
     function launch() {
         window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/runes/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
-        //window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/items/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
-        //window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/spells/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
+        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/items/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
+        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/spells/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
     }
 
     // Initialize the champion data for the dropdowns
