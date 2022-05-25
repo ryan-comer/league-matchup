@@ -1,20 +1,21 @@
 require('dotenv').config()
 const path = require('path')
 
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, ipcMain} = require('electron')
 const isDev = require('electron-is-dev')
 
+const { exec } = require('node:child_process')
+
 const createWindow = () => {
-    console.log("CREATE WINDOW")
     const win = new BrowserWindow({
-        width: 800,
+        width: 1000,
         height: 600,
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: true,
+            contextIsolation: false,
+            preload: path.join(__dirname, 'preload.js')
         }
     })
-    
-    console.log(isDev)
 
     win.loadURL(
         isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, 'build/index.html')}`
@@ -23,6 +24,21 @@ const createWindow = () => {
         win.webContents.openDevTools({mode: 'detach'})
     }
 }
+
+ipcMain.on('launch', (e, url) => {
+    const command = `start "" "${url}"`
+    exec(command, (error, stdout, stderr) => {
+        if (error) {
+            console.log(`error: ${error.message}`);
+            return;
+        }
+        if (stderr) {
+            console.log(`stderr: ${stderr}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+    })
+})
 
 app.whenReady().then(() => {
     createWindow()
