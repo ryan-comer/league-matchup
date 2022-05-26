@@ -28,7 +28,7 @@ const ranks = [
     },
     {
         label: 'Master+',
-        urlName: ''
+        urlName: 'master'
     },
 ]
 
