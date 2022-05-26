@@ -5,6 +5,7 @@ import {
 } from '@mui/material'
 
 import ChampionPicker from '../components/ChampionPicker'
+import RankingPicker from '../components/RankingPicker'
 
 import { useState } from 'react'
 import axios from 'axios'
@@ -61,6 +62,7 @@ function MainPage(props){
     const [champions, setChampions] = useState(null)
     const [yourChampion, setYourChampion] = useState(null)
     const [theirChampion, setTheirChampion] = useState(null)
+    const [rank, setRank] = useState('')
     if (champions === null) {
         getChampionData()
     }
@@ -73,11 +75,19 @@ function MainPage(props){
         setTheirChampion(champion)
     }
 
+    function rankSelected(newRank) {
+        setRank(newRank)
+    }
+
     // Launch the windows based on the matchup selection
     function launch() {
-        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/runes/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
-        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/items/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
-        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/spells/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}`)
+        if (yourChampion === null || theirChampion === null) {
+            return
+        }
+
+        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/runes/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}/${rank}`)
+        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/items/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}/${rank}`)
+        window.ipcRenderer.send('launch', `http://www.leagueofgraphs.com/champions/spells/${ChampionToURLName(yourChampion)}/vs-${ChampionToURLName(theirChampion)}/${rank}`)
     }
 
     // Initialize the champion data for the dropdowns
@@ -132,8 +142,12 @@ function MainPage(props){
             </Box>
             <Box sx={{
                 display: 'flex',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                marginBottom: 5
             }}>
+                <RankingPicker onValueChange={rankSelected}/>
+            </Box>
+            <Box sx={{textAlign: 'center'}}>
                 <Button variant='contained' color='secondary' onClick={launch}>Launch</Button>
             </Box>
         </Box>
